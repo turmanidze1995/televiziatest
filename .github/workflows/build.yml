@@ -25,7 +25,10 @@ jobs:
         run: sed -i 's/buildConfigFields\./buildConfigFields?./g' M3UAndroid-master/native-load-gradle-plugin/src/main/kotlin/dev/oxyroid/nativeload/NativeLoadPlugin.kt
       - name: Build
         run: cd M3UAndroid-master && ./gradlew :app:smartphone:assembleRelease --no-daemon
+      - name: Collect APK
+        run: mkdir -p out && cp $(find M3UAndroid-master -name "*.apk") out/ && ls -la out
       - uses: actions/upload-artifact@v4
         with:
           name: Televizia-APK
-          path: M3UAndroid-master/app/smartp
+          path: out
+          if-no-files-found: error
