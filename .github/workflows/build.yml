@@ -21,9 +21,11 @@ jobs:
         run: git clone --depth 1 https://github.com/oxyroid/native-load-gradle-plugin.git M3UAndroid-master/plugin_new
       - name: Replace submodules
         run: cd M3UAndroid-master && rm -rf parser native-load-gradle-plugin && mv parser_new parser && mv plugin_new native-load-gradle-plugin && chmod +x gradlew
+      - name: Patch plugin
+        run: sed -i 's/buildConfigFields\./buildConfigFields?./g' M3UAndroid-master/native-load-gradle-plugin/src/main/kotlin/dev/oxyroid/nativeload/NativeLoadPlugin.kt
       - name: Build
         run: cd M3UAndroid-master && ./gradlew :app:smartphone:assembleRelease --no-daemon
       - uses: actions/upload-artifact@v4
         with:
           name: Televizia-APK
-          path: M3UAndroid-master/app/smartphone/build/outputs/**/*.apk
+          path: M3UAndroid-master/app/smartp
