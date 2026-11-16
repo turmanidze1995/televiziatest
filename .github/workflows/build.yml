@@ -1,4 +1,4 @@
-ლname: Build APK
+name: Build APK
 on:
   push:
   workflow_dispatch:
@@ -12,10 +12,13 @@ jobs:
           distribution: temurin
           java-version: 21
       - uses: android-actions/setup-android@v3
-      - uses: gradle/actions/setup-gradle@v4
-      - run: chmod +x gradlew
-      - run: ./gradlew :app:smartphone:assembleRelease --no-daemon
-      - uses: actions/upload-artifact@v4
-        with:
-          name: Televizia-APK
-          path: app/smartphone/build/outputs/**/*.apk
+      - name: Unpack and fetch submodules
+        run: |
+          unzip -q src.zip
+          cd M3UAndroid-master
+          rm -rf parser native-load-gradle-plugin
+          git clone --depth 1 https://github.com/oxyroid/parser.git parser
+          git clone --depth 1 https://github.com/oxyroid/native-load-gradle-plugin.git native-load-gradle-plugin
+          chmod +x gradlew
+      - name: Build
+        working-dir
